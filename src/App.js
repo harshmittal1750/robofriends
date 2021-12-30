@@ -12,6 +12,16 @@ class App extends Component {
       searchfield: "",
     };
   }
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => {
+        return response.json();
+      })
+      .then((users) => {
+        this.setState({ robots: users });
+      });
+    this.setState({ robots: robots });
+  }
   onSearchChange = (event) => {
     this.setState({ searchfield: event.target.value });
     console.log(event.target.value);
@@ -28,21 +38,25 @@ class App extends Component {
         .toLowerCase()
         .includes(this.state.searchfield.toLowerCase());
     });
-    return (
-      <div className="tc">
-        <h1>
-          {" "}
-          <span
-            className="f1  lh-solid  "
-            style={{ fontFamily: "Shizuru", color: "lime", fontSize: "4rem" }}
-          >
-            RoboFriends
-          </span>
-        </h1>
-        <SearchBox searchChange={this.onSearchChange} />
-        <CardList robots={filteredRobots} />
-      </div>
-    );
+    if (robots.length === 0) {
+      return <h1>Loding....</h1>;
+    } else {
+      return (
+        <div className="tc">
+          <h1>
+            {" "}
+            <span
+              className="f1  lh-solid  "
+              style={{ fontFamily: "Shizuru", color: "lime", fontSize: "4rem" }}
+            >
+              RoboFriends
+            </span>
+          </h1>
+          <SearchBox searchChange={this.onSearchChange} />
+          <CardList robots={filteredRobots} />
+        </div>
+      );
+    }
   }
 }
 
